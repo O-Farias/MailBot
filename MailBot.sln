@@ -4,21 +4,27 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailBot", "MailBot\MailBot.csproj", "{8020EDC0-4468-5C6B-6175-ED688DC1EF1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailBot.Tests", "Tests\MailBot.Tests\MailBot.Tests.csproj", "{9130EDC0-4468-5C6B-6175-ED688DC1EF1D}"
+EndProject
 Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8020EDC0-4468-5C6B-6175-ED688DC1EF1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8020EDC0-4468-5C6B-6175-ED688DC1EF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8020EDC0-4468-5C6B-6175-ED688DC1EF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8020EDC0-4468-5C6B-6175-ED688DC1EF1C}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A9030662-779E-41A9-AE20-491F8D9FFBF0}
-	EndGlobalSection
+    GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        Debug|Any CPU = Debug|Any CPU
+        Release|Any CPU = Release|Any CPU
+    EndGlobalSection
+    GlobalSection(ProjectConfigurationPlatforms) = postSolution
+        {8020EDC0-4468-5C6B-6175-ED688DC1EF1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {8020EDC0-4468-5C6B-6175-ED688DC1EF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {8020EDC0-4468-5C6B-6175-ED688DC1EF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {8020EDC0-4468-5C6B-6175-ED688DC1EF1C}.Release|Any CPU.Build.0 = Release|Any CPU
+        {9130EDC0-4468-5C6B-6175-ED688DC1EF1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {9130EDC0-4468-5C6B-6175-ED688DC1EF1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {9130EDC0-4468-5C6B-6175-ED688DC1EF1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {9130EDC0-4468-5C6B-6175-ED688DC1EF1D}.Release|Any CPU.Build.0 = Release|Any CPU
+    EndGlobalSection
+    GlobalSection(SolutionProperties) = preSolution
+        HideSolutionNode = FALSE
+    EndGlobalSection
+    GlobalSection(ExtensibilityGlobals) = postSolution
+        SolutionGuid = {A9030662-779E-41A9-AE20-491F8D9FFBF0}
+    EndGlobalSection
 EndGlobal
