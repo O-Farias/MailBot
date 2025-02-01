@@ -1,0 +1,9 @@
+{
+  "Name": "welcome",
+  "Subject": "Bem-vindo, {UserName}!",
+  "Body": "<h1>Olá {UserName}!</h1><p>Bem-vindo ao nosso serviço.</p>",
+  "IsHtml": true,
+  "Variables": {
+    "UserName": "Nome do usuário"
+  }
+}
