@@ -2,7 +2,7 @@ using MailBot.Models;
 
 namespace MailBot.MailService;
 
-public class TemplateService
+public class TemplateService : ITemplateService
 {
     private readonly Dictionary<string, EmailTemplate> _templates = new();
 
