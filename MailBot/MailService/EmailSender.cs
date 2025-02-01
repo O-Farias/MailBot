@@ -7,10 +7,10 @@ namespace MailBot.MailService;
 public class EmailSender
 {
     private readonly EmailSettings _settings;
-    private readonly TemplateService _templateService;
+    private readonly ITemplateService _templateService;
     private readonly ILogger<EmailSender> _logger;
 
-    public EmailSender(EmailSettings settings, TemplateService templateService, ILogger<EmailSender> logger)
+    public EmailSender(EmailSettings settings, ITemplateService templateService, ILogger<EmailSender> logger)
     {
         _settings = settings;
         _templateService = templateService;
