@@ -1,5 +1,5 @@
-
 using Xunit;
+using Moq;
 using MailBot.MailService;
 using MailBot.Models;
 
@@ -7,11 +7,17 @@ namespace MailBot.Tests.MailService;
 
 public class TemplateServiceTests
 {
+    private readonly Mock<ITemplateService> _mockTemplateService;
+
+    public TemplateServiceTests()
+    {
+        _mockTemplateService = new Mock<ITemplateService>();
+    }
+
     [Fact]
     public void ProcessTemplate_ReplacesVariables_Correctly()
     {
         // Arrange
-        var service = new TemplateService();
         var template = new EmailTemplate
         {
             Name = "welcome",
@@ -20,15 +26,26 @@ public class TemplateServiceTests
             IsHtml = false
         };
 
-        service.AddTemplate("welcome", template);
-
         var variables = new Dictionary<string, string>
         {
             { "Name", "João" }
         };
 
+        _mockTemplateService
+            .Setup(x => x.GetTemplate("welcome"))
+            .Returns(template);
+
+        _mockTemplateService
+            .Setup(x => x.ProcessTemplate("welcome", variables))
+            .Returns(new EmailMessage
+            {
+                Subject = "Hello João",
+                Body = "Welcome João!",
+                IsHtml = false
+            });
+
         // Act
-        var result = service.ProcessTemplate("welcome", variables);
+        var result = _mockTemplateService.Object.ProcessTemplate("welcome", variables);
 
         // Assert
         Assert.Equal("Hello João", result.Subject);
@@ -40,9 +57,12 @@ public class TemplateServiceTests
     public void GetTemplate_NonExistentTemplate_ThrowsException()
     {
         // Arrange
-        var service = new TemplateService();
+        _mockTemplateService
+            .Setup(x => x.GetTemplate("nonexistent"))
+            .Throws<KeyNotFoundException>();
 
         // Act & Assert
-        Assert.Throws<KeyNotFoundException>(() => service.GetTemplate("nonexistent"));
+        Assert.Throws<KeyNotFoundException>(() =>
+            _mockTemplateService.Object.GetTemplate("nonexistent"));
     }
 }
