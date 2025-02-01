@@ -40,3 +40,5 @@ artifacts/
 *.swo
 .DS_Store
 Thumbs.db
+
+appsettings.json
