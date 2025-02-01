@@ -1,58 +1,51 @@
 using MailKit.Net.Smtp;
 using MimeKit;
+using MailBot.Models;
 
 namespace MailBot.MailService;
-
-public record EmailSettings
-{
-    public string SmtpServer { get; init; } = string.Empty;
-    public int Port { get; init; }
-    public string Username { get; init; } = string.Empty;
-    public string Password { get; init; } = string.Empty;
-    public string FromName { get; init; } = string.Empty;
-    public string FromAddress { get; init; } = string.Empty;
-}
 
 public class EmailSender
 {
     private readonly EmailSettings _settings;
+    private readonly TemplateService _templateService;
 
-    public EmailSender(EmailSettings settings)
+    public EmailSender(EmailSettings settings, TemplateService templateService)
     {
         _settings = settings;
+        _templateService = templateService;
     }
 
     public async Task SendEmailAsync(EmailMessage message)
     {
-        try
+        var email = new MimeMessage();
+        email.From.Add(new MailboxAddress(_settings.FromName, _settings.FromAddress));
+        email.To.Add(MailboxAddress.Parse(message.To));
+        email.Subject = message.Subject;
+
+        var builder = new BodyBuilder();
+        if (message.IsHtml)
+            builder.HtmlBody = message.Body;
+        else
+            builder.TextBody = message.Body;
+
+        foreach (var attachment in message.Attachments)
         {
-            var email = new MimeMessage();
-            email.From.Add(new MailboxAddress(_settings.FromName, _settings.FromAddress));
-            email.To.Add(MailboxAddress.Parse(message.To));
-            email.Subject = message.Subject;
-
-            var builder = new BodyBuilder();
-            if (message.IsHtml)
-                builder.HtmlBody = message.Body;
-            else
-                builder.TextBody = message.Body;
-
-            foreach (var attachment in message.Attachments)
-            {
-                builder.Attachments.Add(attachment);
-            }
-
-            email.Body = builder.ToMessageBody();
-
-            using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(_settings.SmtpServer, _settings.Port, false);
-            await smtp.AuthenticateAsync(_settings.Username, _settings.Password);
-            await smtp.SendAsync(email);
-            await smtp.DisconnectAsync(true);
+            builder.Attachments.Add(attachment);
         }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao enviar e-mail: {ex.Message}", ex);
-        }
+
+        email.Body = builder.ToMessageBody();
+
+        using var smtp = new SmtpClient();
+        await smtp.ConnectAsync(_settings.SmtpServer, _settings.Port, false);
+        await smtp.AuthenticateAsync(_settings.Username, _settings.Password);
+        await smtp.SendAsync(email);
+        await smtp.DisconnectAsync(true);
+    }
+
+    public async Task SendEmailWithTemplateAsync(string to, string templateName, Dictionary<string, string> variables)
+    {
+        var message = _templateService.ProcessTemplate(templateName, variables);
+        message.To = to;
+        await SendEmailAsync(message);
     }
 }
