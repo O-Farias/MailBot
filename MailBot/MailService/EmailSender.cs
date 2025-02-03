@@ -2,9 +2,10 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using MailBot.Models;
 using Microsoft.Extensions.Logging;
+
 namespace MailBot.MailService;
 
-public class EmailSender
+public class EmailSender : IEmailSender
 {
     private readonly EmailSettings _settings;
     private readonly ITemplateService _templateService;
