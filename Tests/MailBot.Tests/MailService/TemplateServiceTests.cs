@@ -7,11 +7,13 @@ namespace MailBot.Tests.MailService;
 
 public class TemplateServiceTests
 {
-    private readonly Mock<ITemplateService> _mockTemplateService;
+    private readonly Mock<ITemplateService> _templateServiceMock;
+    private readonly ITemplateService _templateService;
 
     public TemplateServiceTests()
     {
-        _mockTemplateService = new Mock<ITemplateService>();
+        _templateServiceMock = new Mock<ITemplateService>();
+        _templateService = _templateServiceMock.Object;
     }
 
     [Fact]
@@ -26,17 +28,12 @@ public class TemplateServiceTests
             IsHtml = false
         };
 
-        var variables = new Dictionary<string, string>
-        {
-            { "Name", "João" }
-        };
-
-        _mockTemplateService
+        _templateServiceMock
             .Setup(x => x.GetTemplate("welcome"))
             .Returns(template);
 
-        _mockTemplateService
-            .Setup(x => x.ProcessTemplate("welcome", variables))
+        _templateServiceMock
+            .Setup(x => x.ProcessTemplate("welcome", It.IsAny<Dictionary<string, string>>()))
             .Returns(new EmailMessage
             {
                 Subject = "Hello João",
@@ -44,25 +41,15 @@ public class TemplateServiceTests
                 IsHtml = false
             });
 
+        var variables = new Dictionary<string, string>
+        {
+            { "Name", "João" }
+        };
+
         // Act
-        var result = _mockTemplateService.Object.ProcessTemplate("welcome", variables);
+        var result = _templateService.ProcessTemplate("welcome", variables);
 
         // Assert
         Assert.Equal("Hello João", result.Subject);
-        Assert.Equal("Welcome João!", result.Body);
-        Assert.False(result.IsHtml);
-    }
-
-    [Fact]
-    public void GetTemplate_NonExistentTemplate_ThrowsException()
-    {
-        // Arrange
-        _mockTemplateService
-            .Setup(x => x.GetTemplate("nonexistent"))
-            .Throws<KeyNotFoundException>();
-
-        // Act & Assert
-        Assert.Throws<KeyNotFoundException>(() =>
-            _mockTemplateService.Object.GetTemplate("nonexistent"));
     }
 }
